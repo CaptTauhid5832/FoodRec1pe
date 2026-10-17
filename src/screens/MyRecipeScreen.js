@@ -20,27 +20,49 @@ import {
     const [recipes, setrecipes] = useState([]);
     const [loading, setLoading] = useState(true);
   
+    const fetchrecipes = async () => {
+      try {
+        const storedRecipes = await AsyncStorage.getItem("customrecipes");
+        setrecipes(storedRecipes ? JSON.parse(storedRecipes) : []);
+      } catch (error) {
+        console.error("Error loading recipes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Reload whenever this screen comes back into focus (e.g. after saving a recipe)
     useEffect(() => {
-      const fetchrecipes = async () => {
-        
-        };
-  
+      const unsubscribe = navigation.addListener("focus", fetchrecipes);
       fetchrecipes();
-    }, []);
-  
+      return unsubscribe;
+    }, [navigation]);
+
     const handleAddrecipe = () => {
-
+      navigation.navigate("RecipesFormScreen");
     };
-  
+
     const handlerecipeClick = (recipe) => {
-
+      navigation.navigate("CustomRecipesScreen", { recipe });
     };
+
     const deleterecipe = async (index) => {
-    
+      try {
+        const updatedrecipes = [...recipes];
+        updatedrecipes.splice(index, 1);
+        await AsyncStorage.setItem("customrecipes", JSON.stringify(updatedrecipes));
+        setrecipes(updatedrecipes);
+      } catch (error) {
+        console.error("Error deleting the recipe:", error);
+      }
     };
-  
-    const editrecipe = (recipe, index) => {
 
+    const editrecipe = (recipe, index) => {
+      navigation.navigate("RecipesFormScreen", {
+        recipeToEdit: recipe,
+        recipeIndex: index,
+        onrecipeEdited: fetchrecipes,
+      });
     };
   
     return (
@@ -64,17 +86,25 @@ import {
               recipes.map((recipe, index) => (
                 <View key={index} style={styles.recipeCard} testID="recipeCard">
                   <TouchableOpacity testID="handlerecipeBtn" onPress={() => handlerecipeClick(recipe)}>
-                  
+                    {recipe.image ? (
+                      <Image source={{ uri: recipe.image }} style={styles.recipeImage} />
+                    ) : null}
                     <Text style={styles.recipeTitle}>{recipe.title}</Text>
                     <Text style={styles.recipeDescription} testID="recipeDescp">
-                  
+                      {recipe.description && recipe.description.length > 50
+                        ? `${recipe.description.slice(0, 50)}...`
+                        : recipe.description}
                     </Text>
                   </TouchableOpacity>
   
                   {/* Edit and Delete Buttons */}
                   <View style={styles.actionButtonsContainer} testID="editDeleteButtons">
-                    
-                
+                    <TouchableOpacity onPress={() => editrecipe(recipe, index)} style={styles.editButton}>
+                      <Text style={styles.editButtonText}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => deleterecipe(index)} style={styles.deleteButton}>
+                      <Text style={styles.deleteButtonText}>Delete</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               ))
