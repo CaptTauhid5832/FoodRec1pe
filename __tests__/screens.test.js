@@ -65,7 +65,7 @@ test("custom recipe screen shows and favorites a user recipe", async () => {
 
 test("every category has at least one recipe", async () => {
   await renderWithStore(<HomeScreen />);
-  for (const cat of ["Beef","Chicken","Dessert","Lamb","Pasta","Seafood","Vegan","Vegetarian","Breakfast","Goat"]) {
+  for (const cat of ["Beef","Chicken","Dessert","Lamb","Pasta","Seafood"]) {
     await fireEvent.press(screen.getByText(cat));
     expect(screen.queryByText("No recipes in this category yet.")).toBeNull();
   }
@@ -85,7 +85,7 @@ test("Chocolate Brownies uses the bundled photo", () => {
 
 test("removed categories are gone", async () => {
   await renderWithStore(<HomeScreen />);
-  for (const cat of ["Miscellaneous","Pork","Side","Starter"]) {
+  for (const cat of ["Miscellaneous","Pork","Side","Starter","Vegan","Vegetarian","Breakfast","Goat"]) {
     expect(screen.queryByText(cat)).toBeNull();
   }
 });
@@ -128,4 +128,10 @@ test("Seafood category shows Seafood Creole with its photo", async () => {
   await renderWithStore(<HomeScreen />);
   await fireEvent.press(screen.getByText("Seafood"));
   expect(screen.getByText("Seafood Creole")).toBeTruthy();
+});
+
+test("every added recipe has its own bundled photo", () => {
+  const recipes = require("../src/data/moreRecipes").default;
+  expect(recipes.length).toBe(5);
+  for (const r of recipes) expect(typeof r.recipeImage).not.toBe("string");
 });

@@ -48,26 +48,6 @@ export default function HomeScreen() {
       strCategory: "Seafood",
       strCategoryThumb: "https://www.themealdb.com/images/category/seafood.png",
     },
-      {
-        idCategory: "11",
-        strCategory: "Vegan",
-        strCategoryThumb: "https://www.themealdb.com/images/category/vegan.png",
-      },
-      {
-        idCategory: "12",
-        strCategory: "Vegetarian",
-        strCategoryThumb: "https://www.themealdb.com/images/category/vegetarian.png",
-      },
-      {
-        idCategory: "13",
-        strCategory: "Breakfast",
-        strCategoryThumb: "https://www.themealdb.com/images/category/breakfast.png",
-      },
-      {
-        idCategory: "14",
-        strCategory: "Goat",
-        strCategoryThumb: "https://images.unsplash.com/photo-1619711667542-c049700dd9e0?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      },
       
   ]);
 
