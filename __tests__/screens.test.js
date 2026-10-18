@@ -65,7 +65,7 @@ test("custom recipe screen shows and favorites a user recipe", async () => {
 
 test("every category has at least one recipe", async () => {
   await renderWithStore(<HomeScreen />);
-  for (const cat of ["Beef","Chicken","Dessert","Vegan","Vegetarian","Breakfast","Goat"]) {
+  for (const cat of ["Beef","Chicken","Dessert","Lamb","Vegan","Vegetarian","Breakfast","Goat"]) {
     await fireEvent.press(screen.getByText(cat));
     expect(screen.queryByText("No recipes in this category yet.")).toBeNull();
   }
@@ -85,7 +85,7 @@ test("Chocolate Brownies uses the bundled photo", () => {
 
 test("removed categories are gone", async () => {
   await renderWithStore(<HomeScreen />);
-  for (const cat of ["Lamb","Miscellaneous","Pasta","Pork","Seafood","Side","Starter"]) {
+  for (const cat of ["Miscellaneous","Pasta","Pork","Seafood","Side","Starter"]) {
     expect(screen.queryByText(cat)).toBeNull();
   }
 });
@@ -98,4 +98,14 @@ test("Lemon Delicious Pudding is in Dessert with its photo", async () => {
   await renderWithStore(<HomeScreen />);
   await fireEvent.press(screen.getByText("Dessert"));
   expect(screen.getByText(/^Lemon Delicious/)).toBeTruthy();
+});
+
+test("Lamb category shows Slow Roast Lamb with its photo", async () => {
+  const recipes = require("../src/data/moreRecipes").default;
+  const lamb = recipes.filter((r) => r.category === "Lamb");
+  expect(lamb.map((r) => r.recipeName)).toEqual(["Slow Roast Lamb"]);
+  expect(typeof lamb[0].recipeImage).not.toBe("string");
+  await renderWithStore(<HomeScreen />);
+  await fireEvent.press(screen.getByText("Lamb"));
+  expect(screen.getByText("Slow Roast Lamb")).toBeTruthy();
 });

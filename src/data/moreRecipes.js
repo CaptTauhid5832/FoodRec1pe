@@ -437,6 +437,61 @@ const moreRecipes = [
         "measure": "60g melted"
       }
     ]
+  },
+  {
+    "category": "Lamb",
+    "idFood": "40",
+    "idCategory": "4",
+    "recipeName": "Slow Roast Lamb",
+    "recipeInstructions": "Make the roasting bed: put the garlic, onion and rosemary in the roasting pan. This lifts the lamb out of the juices so it cooks evenly, flavours the meat that touches it, and flavours the pan juices for the gravy.\r\nSeason the lamb leg all over with salt and pepper.\r\nTurn the lamb upside down (fat side down) onto the bed and pour the stock and wine around it. Leg is a lean cut, so slow-cooking it partly in liquid keeps it moist.\r\nDrizzle the exposed top of the lamb with olive oil.\r\nCover the pan tightly with foil and slow roast at 160C/140C fan for 5 hours, until the meat pulls apart easily.\r\nRemove the foil, turn the oven up to 200C/180C fan and roast for 20 to 30 minutes until browned.\r\nRest the lamb for 15 minutes. Strain the pan juices into a saucepan, whisk in the flour and simmer until thickened to make gravy.\r\nPull the lamb apart with tongs and serve with the gravy.",
+    "recipeImage": require("../../assets/recipes/slow-roast-lamb.jpg"),
+    "recipeId": "lamb_40",
+    "recipeCategory": "Lamb",
+    "recipeOrigin": "Australian",
+    "cookingDescription": "Lamb leg slow roasted on garlic, onion and rosemary until it falls apart.",
+    "recipeTags": "Roast,Slow Cooked",
+    "ingredients": [
+      {
+        "ingredientName": "Lamb Leg",
+        "measure": "2kg bone-in"
+      },
+      {
+        "ingredientName": "Garlic",
+        "measure": "1 head, halved"
+      },
+      {
+        "ingredientName": "Onions",
+        "measure": "2, quartered"
+      },
+      {
+        "ingredientName": "Rosemary",
+        "measure": "4 sprigs"
+      },
+      {
+        "ingredientName": "Chicken Stock",
+        "measure": "2 cups (500ml)"
+      },
+      {
+        "ingredientName": "Red Wine",
+        "measure": "1 cup (250ml)"
+      },
+      {
+        "ingredientName": "Olive Oil",
+        "measure": "1 tbs"
+      },
+      {
+        "ingredientName": "Plain Flour",
+        "measure": "2 tbs (for gravy)"
+      },
+      {
+        "ingredientName": "Salt",
+        "measure": "1 tsp"
+      },
+      {
+        "ingredientName": "Pepper",
+        "measure": "1/2 tsp"
+      }
+    ]
   }
 ];
 
