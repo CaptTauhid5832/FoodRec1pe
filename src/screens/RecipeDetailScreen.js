@@ -9,6 +9,23 @@ import { imageSource } from "../utils/imageSource";
 import { useDispatch, useSelector } from "react-redux"; // Redux hooks
 import { toggleFavorite, selectIsFavorite } from "../redux/favoritesSlice"; // Redux action
 
+// Time, servings, calories and difficulty for a recipe.
+// Uses the recipe's own values when it has them, otherwise estimates them
+// from its number of steps and ingredients.
+export const recipeInfo = (recipe) => {
+  const steps = (recipe.recipeInstructions || "")
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 3).length;
+  const ingredients = (recipe.ingredients || []).length;
+  const mins = recipe.prepTime || 10 + steps * 5;
+  const servings = recipe.servings || (ingredients > 8 ? 4 : 2);
+  const calories = recipe.calories || 150 + ingredients * 45;
+  const difficulty =
+    recipe.difficulty || (steps <= 4 ? "Easy" : steps <= 8 ? "Medium" : "Hard");
+  return { mins, servings, calories, difficulty };
+};
+
 export default function RecipeDetailScreen(props) {
   const recipe = props.route?.params || {}; // recipe passed from previous screen
 
@@ -31,6 +48,8 @@ export default function RecipeDetailScreen(props) {
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(recipe)); // Dispatch the recipe to favorites
   };
+
+  const info = recipeInfo(recipe);
 
   return (
     <ScrollView
@@ -76,19 +95,19 @@ export default function RecipeDetailScreen(props) {
         <View style={styles.miscContainer} testID="miscContainer">
           <View style={styles.miscItem}>
             <Text style={styles.miscIcon}>🕒</Text>
-            <Text style={styles.miscText}>35 Mins</Text>
+            <Text style={styles.miscText} testID="prepTime">{info.mins} Mins</Text>
           </View>
           <View style={styles.miscItem}>
             <Text style={styles.miscIcon}>👥</Text>
-            <Text style={styles.miscText}>03 Servings</Text>
+            <Text style={styles.miscText} testID="servings">{String(info.servings).padStart(2, "0")} Servings</Text>
           </View>
           <View style={styles.miscItem}>
             <Text style={styles.miscIcon}>🔥</Text>
-            <Text style={styles.miscText}>103 Cal</Text>
+            <Text style={styles.miscText} testID="calories">{info.calories} Cal</Text>
           </View>
           <View style={styles.miscItem}>
             <Text style={styles.miscIcon}>🎚️</Text>
-            <Text style={styles.miscText}>Medium</Text>
+            <Text style={styles.miscText} testID="difficulty">{info.difficulty}</Text>
           </View>
         </View>
 

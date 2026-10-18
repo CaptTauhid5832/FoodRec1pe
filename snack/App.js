@@ -5,6 +5,7 @@ import {
   View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Pressable,
   FlatList, TextInput, ActivityIndicator, Animated,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer, useNavigation, useRoute } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -366,6 +367,63 @@ const moreRecipes = [
   }
 ];
 
+// ===== src/data/extraCategoryRecipes.js =====
+// One recipe for each extra category. The photo is that category's image.
+const img = (name) => `https://www.themealdb.com/images/category/${name}.png`;
+
+const make = (idFood, idCategory, category, recipeName, origin, ingredients, steps) => ({
+  category,
+  idFood,
+  idCategory,
+  recipeName,
+  recipeInstructions: steps.join("\r\n"),
+  recipeImage: img(category.toLowerCase()),
+  recipeId: `${category.toLowerCase()}_${idFood}`,
+  recipeCategory: category,
+  recipeOrigin: origin,
+  cookingDescription: steps[0],
+  recipeTags: category,
+  ingredients: ingredients.map(([ingredientName, measure]) => ({ ingredientName, measure })),
+});
+
+const extraCategoryRecipes = [
+  make("50", "9", "Breakfast", "Full English Breakfast", "British",
+    [["Eggs", "2"], ["Sausages", "2"], ["Bacon", "2 rashers"], ["Baked Beans", "200g"], ["Tomato", "1 halved"], ["Mushrooms", "100g"], ["Bread", "2 slices"]],
+    ["Grill the sausages and bacon until golden.",
+     "Fry the mushrooms and tomato halves in a little oil.",
+     "Warm the baked beans in a small pan.",
+     "Fry the eggs to your liking and toast the bread.",
+     "Serve everything together on a warm plate."]),
+  make("51", "10", "Pork", "Honey Garlic Pork Chops", "American",
+    [["Pork Chops", "4"], ["Honey", "3 tbs"], ["Garlic", "4 cloves minced"], ["Soy Sauce", "2 tbs"], ["Olive Oil", "1 tbs"], ["Salt", "pinch"], ["Pepper", "pinch"]],
+    ["Season the pork chops with salt and pepper.",
+     "Heat the oil in a pan and cook the chops 4-5 minutes per side.",
+     "Mix the honey, garlic and soy sauce in a bowl.",
+     "Pour the sauce over the chops and simmer for 2 minutes until sticky.",
+     "Rest for 5 minutes, then serve."]),
+  make("52", "11", "Starter", "Garlic Bread", "Italian",
+    [["Baguette", "1"], ["Butter", "100g softened"], ["Garlic", "3 cloves crushed"], ["Parsley", "2 tbs chopped"], ["Salt", "pinch"]],
+    ["Heat the oven to 200C/180C fan.",
+     "Mix the butter, garlic, parsley and salt.",
+     "Cut the baguette into slices without cutting all the way through.",
+     "Spread the garlic butter between the slices and wrap in foil.",
+     "Bake for 15 minutes, open the foil and bake 5 more minutes until crisp."]),
+  make("53", "12", "Vegetarian", "Vegetable Stir Fry", "Chinese",
+    [["Broccoli", "1 head"], ["Carrot", "2 sliced"], ["Bell Pepper", "1 sliced"], ["Soy Sauce", "3 tbs"], ["Ginger", "1 tbs grated"], ["Garlic", "2 cloves"], ["Vegetable Oil", "2 tbs"]],
+    ["Heat the oil in a wok over high heat.",
+     "Add the garlic and ginger and fry for 30 seconds.",
+     "Add the carrot and broccoli and stir fry for 3 minutes.",
+     "Add the bell pepper and cook for 2 more minutes.",
+     "Stir in the soy sauce and serve with rice."]),
+  make("54", "13", "Side", "Roast Potatoes", "British",
+    [["Potatoes", "1kg"], ["Vegetable Oil", "4 tbs"], ["Rosemary", "2 sprigs"], ["Salt", "1 tsp"]],
+    ["Heat the oven to 220C/200C fan with the oil in a roasting tin.",
+     "Peel and cut the potatoes into large chunks.",
+     "Boil for 8 minutes, drain and shake to rough up the edges.",
+     "Tip into the hot oil, add rosemary and salt, and turn to coat.",
+     "Roast for 45 minutes, turning once, until golden and crisp."]),
+];
+
 // ===== src/components/categories.js =====
 function Categories({
     categories,
@@ -587,8 +645,38 @@ function RecipesFormScreen({ route, navigation }) {
   const { recipeToEdit, recipeIndex } = route.params || {};
   const [title, setTitle] = useState(recipeToEdit ? recipeToEdit.title : "");
   const [image, setImage] = useState(recipeToEdit ? recipeToEdit.image : "");
-  const [description, setDescription] = useState(recipeToEdit ? recipeToEdit.description : "");
+  const [ingredients, setIngredients] = useState(
+    recipeToEdit && recipeToEdit.ingredients ? recipeToEdit.ingredients.join("\n") : ""
+  );
+  const [instructions, setInstructions] = useState(
+    recipeToEdit
+      ? recipeToEdit.instructions
+        ? recipeToEdit.instructions.join("\n")
+        : recipeToEdit.description || ""
+      : ""
+  );
   const [error, setError] = useState("");
+
+  const toList = (text) =>
+    text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        quality: 0.5,
+      });
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        setImage(result.assets[0].uri);
+      }
+    } catch (e) {
+      console.error("Error picking image:", e);
+      setError("Could not open the photo library.");
+    }
+  };
 
   const saverecipe = async () => {
     if (!title.trim()) {
@@ -600,7 +688,9 @@ function RecipesFormScreen({ route, navigation }) {
       id: recipeToEdit?.id || makeRecipeId(),
       title: title.trim(),
       image: image.trim(),
-      description: description.trim(),
+      ingredients: toList(ingredients),
+      instructions: toList(instructions),
+      description: toList(instructions).join(" "),
     };
     try {
       const existingRecipes = await AsyncStorage.getItem(STORAGE_KEY);
@@ -621,9 +711,10 @@ function RecipesFormScreen({ route, navigation }) {
   };
 
   return (
-    <View style={formStyles.container}>
+    <ScrollView style={formStyles.container} contentContainerStyle={formStyles.content}>
+      <Text style={formStyles.label}>Recipe Name</Text>
       <TextInput
-        placeholder="Title"
+        placeholder="Recipe name"
         value={title}
         onChangeText={(t) => {
           setTitle(t);
@@ -632,8 +723,13 @@ function RecipesFormScreen({ route, navigation }) {
         style={formStyles.input}
         testID="titleInput"
       />
+
+      <Text style={formStyles.label}>Image</Text>
+      <TouchableOpacity onPress={pickImage} style={formStyles.uploadButton} testID="uploadImageButton">
+        <Text style={formStyles.uploadButtonText}>Upload Image</Text>
+      </TouchableOpacity>
       <TextInput
-        placeholder="Image URL"
+        placeholder="or paste an image URL"
         value={image}
         onChangeText={setImage}
         style={formStyles.input}
@@ -641,36 +737,73 @@ function RecipesFormScreen({ route, navigation }) {
         testID="imageInput"
       />
       {image ? (
-        <Image source={{ uri: image }} style={formStyles.image} />
+        <Image source={{ uri: image }} style={formStyles.image} testID="imagePreview" />
       ) : (
-        <Text style={formStyles.imagePlaceholder}>Upload Image URL</Text>
+        <Text style={formStyles.imagePlaceholder}>No image selected</Text>
       )}
+
+      <Text style={formStyles.label}>Ingredients (one per line)</Text>
       <TextInput
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
+        placeholder={"2 eggs\n1 cup flour"}
+        value={ingredients}
+        onChangeText={setIngredients}
         multiline={true}
-        numberOfLines={4}
-        style={[formStyles.input, { height: hp(20), textAlignVertical: "top" }]}
-        testID="descriptionInput"
+        numberOfLines={5}
+        style={[formStyles.input, formStyles.multiline]}
+        testID="ingredientsInput"
       />
+
+      <Text style={formStyles.label}>Instructions (one step per line)</Text>
+      <TextInput
+        placeholder={"Mix the eggs and flour\nBake for 20 minutes"}
+        value={instructions}
+        onChangeText={setInstructions}
+        multiline={true}
+        numberOfLines={6}
+        style={[formStyles.input, formStyles.multiline]}
+        testID="instructionsInput"
+      />
+
       {error ? <Text style={formStyles.errorText}>{error}</Text> : null}
       <TouchableOpacity onPress={saverecipe} style={formStyles.saveButton} testID="saveButton">
-        <Text style={formStyles.saveButtonText}>Save recipe</Text>
+        <Text style={formStyles.saveButtonText}>Save Recipe</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.goBack()} style={formStyles.cancelButton}>
         <Text style={formStyles.cancelButtonText}>Cancel</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
 const formStyles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
+  },
+  content: {
     padding: wp(4),
     paddingTop: hp(4),
-    backgroundColor: "white",
+    paddingBottom: hp(6),
+  },
+  label: {
+    fontWeight: "bold",
+    color: "#4B5563",
+    marginTop: hp(1),
+  },
+  multiline: {
+    height: hp(16),
+    textAlignVertical: "top",
+  },
+  uploadButton: {
+    backgroundColor: "#F59E0B",
+    paddingVertical: 10,
+    alignItems: "center",
+    borderRadius: 6,
+    marginTop: hp(1),
+  },
+  uploadButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
@@ -759,6 +892,31 @@ function HomeScreen() {
       idCategory: "8",
       strCategory: "Seafood",
       strCategoryThumb: "https://www.themealdb.com/images/category/seafood.png",
+    },
+    {
+      idCategory: "9",
+      strCategory: "Breakfast",
+      strCategoryThumb: "https://www.themealdb.com/images/category/breakfast.png",
+    },
+    {
+      idCategory: "10",
+      strCategory: "Pork",
+      strCategoryThumb: "https://www.themealdb.com/images/category/pork.png",
+    },
+    {
+      idCategory: "11",
+      strCategory: "Starter",
+      strCategoryThumb: "https://www.themealdb.com/images/category/starter.png",
+    },
+    {
+      idCategory: "12",
+      strCategory: "Vegetarian",
+      strCategoryThumb: "https://www.themealdb.com/images/category/vegetarian.png",
+    },
+    {
+      idCategory: "13",
+      strCategory: "Side",
+      strCategoryThumb: "https://www.themealdb.com/images/category/side.png",
     },
       
   ]);
@@ -1366,6 +1524,7 @@ function HomeScreen() {
       ],
     },
     ...moreRecipes,
+    ...extraCategoryRecipes,
   ]);
 
   const handleChangeCategory = (category) => {
@@ -1467,6 +1626,23 @@ const homeStyles = StyleSheet.create({
 });
 
 // ===== src/screens/RecipeDetailScreen.js =====
+// Time, servings, calories and difficulty for a recipe.
+// Uses the recipe's own values when it has them, otherwise estimates them
+// from its number of steps and ingredients.
+const recipeInfo = (recipe) => {
+  const steps = (recipe.recipeInstructions || "")
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 3).length;
+  const ingredients = (recipe.ingredients || []).length;
+  const mins = recipe.prepTime || 10 + steps * 5;
+  const servings = recipe.servings || (ingredients > 8 ? 4 : 2);
+  const calories = recipe.calories || 150 + ingredients * 45;
+  const difficulty =
+    recipe.difficulty || (steps <= 4 ? "Easy" : steps <= 8 ? "Medium" : "Hard");
+  return { mins, servings, calories, difficulty };
+};
+
 function RecipeDetailScreen(props) {
   const recipe = props.route?.params || {}; // recipe passed from previous screen
 
@@ -1489,6 +1665,8 @@ function RecipeDetailScreen(props) {
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(recipe)); // Dispatch the recipe to favorites
   };
+
+  const info = recipeInfo(recipe);
 
   return (
     <ScrollView
@@ -1534,19 +1712,19 @@ function RecipeDetailScreen(props) {
         <View style={detailStyles.miscContainer} testID="miscContainer">
           <View style={detailStyles.miscItem}>
             <Text style={detailStyles.miscIcon}>🕒</Text>
-            <Text style={detailStyles.miscText}>35 Mins</Text>
+            <Text style={detailStyles.miscText} testID="prepTime">{info.mins} Mins</Text>
           </View>
           <View style={detailStyles.miscItem}>
             <Text style={detailStyles.miscIcon}>👥</Text>
-            <Text style={detailStyles.miscText}>03 Servings</Text>
+            <Text style={detailStyles.miscText} testID="servings">{String(info.servings).padStart(2, "0")} Servings</Text>
           </View>
           <View style={detailStyles.miscItem}>
             <Text style={detailStyles.miscIcon}>🔥</Text>
-            <Text style={detailStyles.miscText}>103 Cal</Text>
+            <Text style={detailStyles.miscText} testID="calories">{info.calories} Cal</Text>
           </View>
           <View style={detailStyles.miscItem}>
             <Text style={detailStyles.miscIcon}>🎚️</Text>
-            <Text style={detailStyles.miscText}>Medium</Text>
+            <Text style={detailStyles.miscText} testID="difficulty">{info.difficulty}</Text>
           </View>
         </View>
 
@@ -1767,7 +1945,7 @@ function MyRecipeScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleAddrecipe} style={myRecipeStyles.addButton} testID="addRecipeButton">
-          <Text style={myRecipeStyles.addButtonText}>Add New recipe</Text>
+          <Text style={myRecipeStyles.addButtonText}>Add New Recipe</Text>
         </TouchableOpacity>
       </View>
 
@@ -1936,6 +2114,11 @@ function CustomRecipesScreen() {
     );
   }
 
+  const ingredients = recipe.ingredients || [];
+  // older saved recipes only have a description
+  const instructions =
+    recipe.instructions || (recipe.description ? [recipe.description] : []);
+
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(recipe));
   };
@@ -1973,9 +2156,30 @@ function CustomRecipesScreen() {
       {/* Recipe Details */}
       <View style={customStyles.contentContainer} testID="contentContainer">
         <Text style={customStyles.recipeTitle}>{recipe.title}</Text>
-        <View style={customStyles.sectionContainer}>
-          <Text style={customStyles.sectionTitle}>Content</Text>
-          <Text style={customStyles.contentText}>{recipe.description}</Text>
+        <View style={customStyles.sectionContainer} testID="customIngredients">
+          <Text style={customStyles.sectionTitle}>Ingredients</Text>
+          {ingredients.length > 0 ? (
+            ingredients.map((item, i) => (
+              <Text key={i} style={customStyles.contentText}>
+                {"\u2022 "}
+                {item}
+              </Text>
+            ))
+          ) : (
+            <Text style={customStyles.contentText}>No ingredients added.</Text>
+          )}
+        </View>
+        <View style={customStyles.sectionContainer} testID="customInstructions">
+          <Text style={customStyles.sectionTitle}>Instructions</Text>
+          {instructions.length > 0 ? (
+            instructions.map((step, i) => (
+              <Text key={i} style={customStyles.contentText}>
+                {`${i + 1}. ${step}`}
+              </Text>
+            ))
+          ) : (
+            <Text style={customStyles.contentText}>No instructions added.</Text>
+          )}
         </View>
       </View>
     </ScrollView>
@@ -2056,8 +2260,9 @@ const customStyles = StyleSheet.create({
     fontSize: hp(2),
   },
   contentText: {
-    fontSize: hp(1.6),
+    fontSize: hp(1.8),
     color: "#4B5563",
+    marginBottom: 4,
   },
 });
 

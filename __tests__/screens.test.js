@@ -163,3 +163,14 @@ test("my recipe details show name, ingredients and instructions", async () => {
   expect(screen.getByText("Instructions")).toBeTruthy();
   expect(screen.getByText("2. Fry")).toBeTruthy();
 });
+
+test("detail screen shows time, servings, calories and difficulty for the recipe", async () => {
+  const recipe = { idFood: "99", recipeName: "Test Dish", category: "Beef",
+    recipeInstructions: "Step one here\r\nStep two here", ingredients: [{ ingredientName: "Salt", measure: "1 tsp" }] };
+  await renderWithStore(<RecipeDetailScreen route={{ params: recipe }} />);
+  expect(screen.getByTestId("prepTime").props.children.join("")).toBe("20 Mins");
+  expect(screen.getByTestId("calories").props.children.join("")).toBe("195 Cal");
+  expect(screen.getByText("Easy")).toBeTruthy();
+  expect(screen.getByText("Ingredients")).toBeTruthy();
+  expect(screen.getByText("Instructions")).toBeTruthy();
+});
