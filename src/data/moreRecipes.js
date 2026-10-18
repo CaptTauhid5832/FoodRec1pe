@@ -492,6 +492,73 @@ const moreRecipes = [
         "measure": "1/2 tsp"
       }
     ]
+  },
+  {
+    "category": "Pasta",
+    "idFood": "41",
+    "idCategory": "6",
+    "recipeName": "Creamy Vegan Mushroom Pasta",
+    "recipeInstructions": "Cook the pasta in salted boiling water. If using frozen peas, add them to the pasta water for the last minute of cooking. Drain.\r\nHeat 1 tbs oil in a pan over medium-low heat and saute the onion and garlic until tender and golden.\r\nPut the onion and garlic in a blender with the hemp seeds, vegetable broth, nutritional yeast, miso, salt and nutmeg.\r\nBlend until creamy and smooth.\r\nHeat the remaining oil in a skillet over medium heat. Add the mushrooms and saute for 6 to 7 minutes until golden and tender, then season with salt.\r\nToss the pasta and peas with the creamy sauce, top with the mushrooms and sprinkle with parsley.",
+    "recipeImage": require("../../assets/recipes/vegan-mushroom-pasta.jpg"),
+    "recipeId": "pasta_41",
+    "recipeCategory": "Pasta",
+    "recipeOrigin": "Italian",
+    "cookingDescription": "Pasta in a creamy hemp seed sauce with golden mushrooms and peas.",
+    "recipeTags": "Pasta,Vegan,Creamy",
+    "ingredients": [
+      {
+        "ingredientName": "Pasta (pappardelle or tagliatelle)",
+        "measure": "340g"
+      },
+      {
+        "ingredientName": "Frozen Peas",
+        "measure": "1 cup"
+      },
+      {
+        "ingredientName": "Olive Oil",
+        "measure": "2 tbs"
+      },
+      {
+        "ingredientName": "Onion",
+        "measure": "1 chopped"
+      },
+      {
+        "ingredientName": "Garlic",
+        "measure": "3 cloves"
+      },
+      {
+        "ingredientName": "Hemp Seeds",
+        "measure": "1/2 cup"
+      },
+      {
+        "ingredientName": "Vegetable Broth",
+        "measure": "1 cup"
+      },
+      {
+        "ingredientName": "Nutritional Yeast",
+        "measure": "3 tbs"
+      },
+      {
+        "ingredientName": "White Miso",
+        "measure": "1 tbs"
+      },
+      {
+        "ingredientName": "Nutmeg",
+        "measure": "pinch"
+      },
+      {
+        "ingredientName": "Mushrooms",
+        "measure": "300g sliced"
+      },
+      {
+        "ingredientName": "Salt",
+        "measure": "to taste"
+      },
+      {
+        "ingredientName": "Parsley",
+        "measure": "to serve"
+      }
+    ]
   }
 ];
 
