@@ -43,6 +43,11 @@ export default function HomeScreen() {
       strCategory: "Pasta",
       strCategoryThumb: "https://www.themealdb.com/images/category/pasta.png",
     },
+    {
+      idCategory: "8",
+      strCategory: "Seafood",
+      strCategoryThumb: "https://www.themealdb.com/images/category/seafood.png",
+    },
       {
         idCategory: "11",
         strCategory: "Vegan",

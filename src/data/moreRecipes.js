@@ -559,6 +559,105 @@ const moreRecipes = [
         "measure": "to serve"
       }
     ]
+  },
+  {
+    "category": "Seafood",
+    "idFood": "42",
+    "idCategory": "8",
+    "recipeName": "Seafood Creole",
+    "recipeInstructions": "Mix the oregano, salt, white pepper, black pepper, cayenne pepper, thyme and basil in a small bowl and set aside.\r\nMelt the butter in a large Dutch oven over medium heat. Stir in the tomato, onion, celery, green bell pepper and garlic. Cook and stir until the onion is translucent, about 5 minutes.\r\nStir in the chicken stock, tomato sauce, sugar, hot pepper sauce and bay leaves. Reduce the heat to low and bring to a simmer. Stir in the seasoning mix and simmer for about 20 minutes until the flavours blend.\r\nGently stir in the rock shrimp, bay scallops and haddock. Bring back to a simmer and cook until the shellfish and fish are opaque, about 20 minutes more. Remove the bay leaves and serve.",
+    "recipeImage": require("../../assets/recipes/seafood-creole.jpg"),
+    "recipeId": "seafood_42",
+    "recipeCategory": "Seafood",
+    "recipeOrigin": "American",
+    "cookingDescription": "Shrimp, scallops and haddock simmered in a spicy tomato sauce.",
+    "recipeTags": "Seafood,Stew,Spicy",
+    "ingredients": [
+      {
+        "ingredientName": "Dried Oregano",
+        "measure": "1/2 tsp"
+      },
+      {
+        "ingredientName": "Salt",
+        "measure": "1 tsp"
+      },
+      {
+        "ingredientName": "White Pepper",
+        "measure": "1/4 tsp"
+      },
+      {
+        "ingredientName": "Black Pepper",
+        "measure": "1/4 tsp"
+      },
+      {
+        "ingredientName": "Cayenne Pepper",
+        "measure": "1/4 tsp"
+      },
+      {
+        "ingredientName": "Dried Thyme",
+        "measure": "1/2 tsp"
+      },
+      {
+        "ingredientName": "Dried Basil",
+        "measure": "1/2 tsp"
+      },
+      {
+        "ingredientName": "Butter",
+        "measure": "4 tbs"
+      },
+      {
+        "ingredientName": "Tomato",
+        "measure": "1 large chopped"
+      },
+      {
+        "ingredientName": "Onion",
+        "measure": "1 chopped"
+      },
+      {
+        "ingredientName": "Celery",
+        "measure": "2 stalks chopped"
+      },
+      {
+        "ingredientName": "Green Bell Pepper",
+        "measure": "1 chopped"
+      },
+      {
+        "ingredientName": "Garlic",
+        "measure": "3 cloves minced"
+      },
+      {
+        "ingredientName": "Chicken Stock",
+        "measure": "2 cups"
+      },
+      {
+        "ingredientName": "Tomato Sauce",
+        "measure": "1 cup"
+      },
+      {
+        "ingredientName": "Sugar",
+        "measure": "1 tsp"
+      },
+      {
+        "ingredientName": "Hot Pepper Sauce",
+        "measure": "1 tsp"
+      },
+      {
+        "ingredientName": "Bay Leaves",
+        "measure": "2"
+      },
+      {
+        "ingredientName": "Rock Shrimp",
+        "measure": "250g"
+      },
+      {
+        "ingredientName": "Bay Scallops",
+        "measure": "250g"
+      },
+      {
+        "ingredientName": "Haddock",
+        "measure": "250g cut into chunks"
+      }
+    ]
   }
 ];
 
