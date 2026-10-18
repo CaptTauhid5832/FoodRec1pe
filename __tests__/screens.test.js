@@ -89,3 +89,13 @@ test("removed categories are gone", async () => {
     expect(screen.queryByText(cat)).toBeNull();
   }
 });
+
+test("Lemon Delicious Pudding is in Dessert with its photo", async () => {
+  const recipes = require("../src/data/moreRecipes").default;
+  const pud = recipes.find((r) => r.recipeName === "Lemon Delicious Pudding");
+  expect(pud.category).toBe("Dessert");
+  expect(typeof pud.recipeImage).not.toBe("string");
+  await renderWithStore(<HomeScreen />);
+  await fireEvent.press(screen.getByText("Dessert"));
+  expect(screen.getByText(/^Lemon Delicious/)).toBeTruthy();
+});

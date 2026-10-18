@@ -398,6 +398,45 @@ const moreRecipes = [
         "measure": "4 tbs"
       }
     ]
+  },
+  {
+    "category": "Dessert",
+    "idFood": "39",
+    "idCategory": "3",
+    "recipeName": "Lemon Delicious Pudding",
+    "recipeInstructions": "Heat the oven to 180C/160C fan and butter a 1.5 litre baking dish.\r\nZest the lemons until you have 1 tablespoon of zest, then squeeze out 1/2 cup of juice.\r\nBeat the melted butter, sugar and zest together, then beat in the egg yolks one at a time.\r\nStir in the flour, then slowly whisk in the milk and lemon juice. The batter will be very runny.\r\nIn a clean bowl, whisk the egg whites until soft peaks form, then gently fold them into the batter.\r\nPour into the dish and place it in a roasting tin. Pour hot water into the tin to come halfway up the dish.\r\nBake for 40 to 45 minutes until the top is golden and springs back when touched.\r\nServe warm. The top is a light sponge and underneath is a lemon custard sauce.",
+    "recipeImage": require("../../assets/recipes/lemon-pudding.jpg"),
+    "recipeId": "dessert_39",
+    "recipeCategory": "Dessert",
+    "recipeOrigin": "Australian",
+    "cookingDescription": "A soft lemon sponge on top with its own lemon custard sauce underneath.",
+    "recipeTags": "Pudding,Lemon",
+    "ingredients": [
+      {
+        "ingredientName": "Lemons",
+        "measure": "2 large (1 tbs zest, 1/2 cup juice)"
+      },
+      {
+        "ingredientName": "Caster Sugar",
+        "measure": "1 cup (200g)"
+      },
+      {
+        "ingredientName": "Full Fat Milk",
+        "measure": "1 cup (250ml)"
+      },
+      {
+        "ingredientName": "Plain Flour",
+        "measure": "1/3 cup (50g)"
+      },
+      {
+        "ingredientName": "Eggs",
+        "measure": "3, separated"
+      },
+      {
+        "ingredientName": "Butter",
+        "measure": "60g melted"
+      }
+    ]
   }
 ];
 
