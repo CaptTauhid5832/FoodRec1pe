@@ -1,5 +1,5 @@
 # FoodRecipe
-# Capt's React Project nundernSuperviosn of IBM
+# Capt's React Project under supervision of IBM
 
 A hands-on practice repository for learning React and React Native by building real mobile apps with Expo.
 
@@ -10,25 +10,39 @@ A hands-on practice repository for learning React and React Native by building r
 A cross-platform recipe app built with React Native and Expo, running on Android, iOS and the web from a single codebase.
 
 ### Features
-- Recipe list with colored cards, cooking time and difficulty level
-- Detail screen with ingredients and numbered cooking steps
-- Back navigation to the recipe list
-- Clean, mobile-first layout using StyleSheet
+- Welcome splash screen with animated rings
+- Recipe list with category filter (Beef, Chicken, ...) and two-column cards
+- Detail screen with ingredients and instructions
+- Favorite any recipe with the heart button, and see them all under **My Favorites**
+- **My Food**: create, edit and delete your own recipes (saved on the device)
 
 ### Tech Stack
-- React Native
-- Expo
-- TypeScript
-- Android Emulator, iOS Simulator and Web
+- React Native 0.88 + Expo SDK 58 (JavaScript)
+- React Navigation 7 (native stack)
+- Redux Toolkit for favorites
+- AsyncStorage for your own recipes
+- Jest + React Native Testing Library for tests
+- Runs on Android, iOS and Web
+
+### Requirements
+- **Node.js 22.13 or newer** (`node -v` to check)
+- To run on a phone: the latest **Expo Go** app from the App Store / Play Store
 
 ### Run Locally
 ```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPO.git
-cd recipe-app
+git clone https://github.com/CaptTauhid5832/FooodRec1pe.git
+cd FooodRec1pe
 npm install
 npx expo start
 ```
-Press **a** for Android, **i** for iOS, or **w** for Web.
+Scan the QR code with Expo Go, or press **a** for Android, **i** for iOS, **w** for Web.
+
+### Test and Build
+```bash
+npm test            # runs the test suite
+npm run build:web   # production web build into dist/
+```
+Every push to `main` runs both automatically on GitHub Actions (`.github/workflows/ci.yml`).
 
 ---
 

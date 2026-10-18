@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { getRecipeKey } from "../redux/favoritesSlice";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -44,12 +45,11 @@ export default function FavoriteScreen() {
   }
 
   return (
-    <>
+    <View style={styles.container}>
       {/* Heading */}
       <View testID="FavoriteRecipes">
         <Text
-          style={{ fontSize: hp(3.8), marginTop: hp(4), marginLeft: 20 }}
-          className="font-semibold text-neutral-600"
+          style={{ fontSize: hp(3.8), marginTop: hp(4), marginLeft: 20, fontWeight: "600", color: "#52525B" }}
         >
           My Favorite Recipes
         </Text>
@@ -72,7 +72,7 @@ export default function FavoriteScreen() {
 
       <FlatList
         data={favoriteRecipesList}
-        keyExtractor={(item, index) => String(item.idFood ?? index)}
+        keyExtractor={(item, index) => getRecipeKey(item) ?? String(index)}
         contentContainerStyle={styles.listContentContainer}
         renderItem={({ item }) => {
           // Recipes from the app use recipeName/recipeImage; your own recipes use title/image
@@ -95,11 +95,15 @@ export default function FavoriteScreen() {
           );
         }}
       />
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F9FAFB",
+  },
   emptyContainer: {
     flex: 1,
     justifyContent: "center",

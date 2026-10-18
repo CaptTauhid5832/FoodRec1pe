@@ -32,13 +32,13 @@ const ArticleCard = ({ item, index, navigation }) => {
     <View
       style={[styles.cardContainer, { paddingLeft: 20, paddingRight: 15}]} testID="articleDisplay"
     >
-      <TouchableOpacity onPress={() => navigation.navigate("RecipeDetail", { ...item })}>
+      <TouchableOpacity testID={`recipeCard-${item.idFood}`} onPress={() => navigation.navigate("RecipeDetail", { ...item })}>
         <Image
           source={{ uri: item.recipeImage }}
           style={[styles.articleImage, { height: index % 3 === 0 ? hp(25) : hp(35) }]}
         />
         <Text style={styles.articleText}>
-          {item.recipeName.length > 20
+          {(item.recipeName || "").length > 20
             ? `${item.recipeName.slice(0, 20)}...`
             : item.recipeName}
         </Text>

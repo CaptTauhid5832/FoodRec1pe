@@ -1,7 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Built-in recipes are identified by idFood; recipes the user creates get an `id`.
+// Prefixing keeps the two kinds from ever colliding.
+export const getRecipeKey = (recipe) => {
+  if (!recipe) return null;
+  if (recipe.idFood) return `food-${recipe.idFood}`;
+  if (recipe.id) return `custom-${recipe.id}`;
+  return null;
+};
+
 const initialState = {
-  favoriterecipes: [], // Updated to handle favorite articles
+  favoriterecipes: [],
 };
 
 const favoritesSlice = createSlice({
@@ -10,8 +19,11 @@ const favoritesSlice = createSlice({
   reducers: {
     toggleFavorite: (state, action) => {
       const recipe = action.payload;
+      const key = getRecipeKey(recipe);
+      if (!key) return; // nothing we can reliably identify
+
       const index = state.favoriterecipes.findIndex(
-        (item) => item.idFood === recipe.idFood
+        (item) => getRecipeKey(item) === key
       );
       if (index >= 0) {
         state.favoriterecipes.splice(index, 1); // already a favorite: remove it
@@ -23,4 +35,10 @@ const favoritesSlice = createSlice({
 });
 
 export const { toggleFavorite } = favoritesSlice.actions;
+
+export const selectIsFavorite = (state, recipe) => {
+  const key = getRecipeKey(recipe);
+  return key !== null && state.favorites.favoriterecipes.some((item) => getRecipeKey(item) === key);
+};
+
 export default favoritesSlice.reducer;

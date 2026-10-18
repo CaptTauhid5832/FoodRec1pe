@@ -6,20 +6,26 @@ import {
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux"; // Redux hooks
-import { toggleFavorite } from "../redux/favoritesSlice"; // Redux action
+import { toggleFavorite, selectIsFavorite } from "../redux/favoritesSlice"; // Redux action
 
 export default function RecipeDetailScreen(props) {
-  const recipe = props.route.params; // recipe passed from previous screen
+  const recipe = props.route?.params || {}; // recipe passed from previous screen
 
   const dispatch = useDispatch();
-  const favoriterecipes = useSelector(
-    (state) => state.favorites.favoriterecipes
-  );
-  const isFavourite = favoriterecipes?.some(
-    (favrecipe) => favrecipe.idFood === recipe.idFood
-  ); // Check by idFood
+  const isFavourite = useSelector((state) => selectIsFavorite(state, recipe));
 
   const navigation = useNavigation();
+
+  if (!recipe.idFood) {
+    return (
+      <View style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
+        <Text style={styles.recipeTitle}>Recipe not found</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")} style={[styles.backButton, { marginTop: 12, marginLeft: 0 }]}>
+          <Text style={styles.backButtonText}>Go to Home</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(recipe)); // Dispatch the recipe to favorites
@@ -46,6 +52,7 @@ export default function RecipeDetailScreen(props) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleToggleFavorite}
+          testID="favoriteButton"
           style={[styles.favoriteButton, { backgroundColor: "white" }]}
         >
           <Text style={styles.favoriteButtonText}>{isFavourite ? "♥" : "♡"}</Text>
@@ -175,15 +182,16 @@ const styles = StyleSheet.create({
   },
   miscContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 8,
     marginBottom: 20,
-    paddingHorizontal: wp(4),
   },
   miscItem: {
     alignItems: "center",
     backgroundColor: "#F5F5F5",
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     borderRadius: 10,
     elevation: 3,
   },
