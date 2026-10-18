@@ -29,6 +29,7 @@ A cross-platform recipe app built with React Native and Expo, running on Android
 - To run on a phone: the latest **Expo Go** app from the App Store / Play Store
 
 ### Run Locally
+snack Expo: https://snack.expo.dev/@capttauhid5832/foodie
 ```bash
 git clone https://github.com/CaptTauhid5832/FooodRec1pe.git
 cd FooodRec1pe
