@@ -8,6 +8,7 @@ import {
 } from "react-native-responsive-screen";
 import Categories from "../components/categories";
 import FoodItems from "../components/recipes";
+import moreRecipes from "../data/moreRecipes";
 
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState("Chicken");
@@ -694,6 +695,7 @@ export default function HomeScreen() {
         }
       ],
     },
+    ...moreRecipes,
   ]);
 
   const handleChangeCategory = (category) => {

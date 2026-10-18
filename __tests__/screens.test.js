@@ -62,3 +62,17 @@ test("custom recipe screen shows and favorites a user recipe", async () => {
   await fireEvent.press(screen.getByTestId("favoriteButton"));
   expect(store.getState().favorites.favoriterecipes).toHaveLength(1);
 });
+
+test("every category has at least one recipe", async () => {
+  await renderWithStore(<HomeScreen />);
+  for (const cat of ["Beef","Chicken","Dessert","Lamb","Miscellaneous","Pasta","Pork","Seafood","Side","Starter","Vegan","Vegetarian","Breakfast","Goat"]) {
+    await fireEvent.press(screen.getByText(cat));
+    expect(screen.queryByText("No recipes in this category yet.")).toBeNull();
+  }
+});
+
+test("Dessert shows dessert recipes", async () => {
+  await renderWithStore(<HomeScreen />);
+  await fireEvent.press(screen.getByText("Dessert"));
+  expect(screen.getByText("Chocolate Brownies")).toBeTruthy();
+});

@@ -13,6 +13,9 @@ export default function Recipe({ categories, foods }) {
   return (
     <View style={styles.container}>
       <View testID="recipesDisplay">
+        {foods.length === 0 ? (
+          <Text style={styles.emptyText}>No recipes in this category yet.</Text>
+        ) : null}
         <FlatList
           data={foods}
           keyExtractor={(item) => item.idFood}
@@ -89,6 +92,12 @@ const styles = StyleSheet.create({
     color: "#6B7280", // gray-500
     marginLeft: wp(2),
     marginTop: hp(0.5),
+  },
+  emptyText: {
+    textAlign: "center",
+    color: "#6B7280",
+    fontSize: hp(1.8),
+    marginTop: hp(4),
   },
   row: {
     justifyContent: "space-between", // Align columns evenly
