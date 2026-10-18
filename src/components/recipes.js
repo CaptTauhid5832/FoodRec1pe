@@ -2,6 +2,7 @@ import { View, Text, Pressable, Image, StyleSheet, FlatList, TouchableOpacity } 
 import React from "react";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp,} from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
+import { imageSource } from "../utils/imageSource";
 
 export default function Recipe({ categories, foods }) {
   const navigation = useNavigation();
@@ -37,7 +38,7 @@ const ArticleCard = ({ item, index, navigation }) => {
     >
       <TouchableOpacity testID={`recipeCard-${item.idFood}`} onPress={() => navigation.navigate("RecipeDetail", { ...item })}>
         <Image
-          source={{ uri: item.recipeImage }}
+          source={imageSource(item.recipeImage)}
           style={[styles.articleImage, { height: index % 3 === 0 ? hp(25) : hp(35) }]}
         />
         <Text style={styles.articleText}>

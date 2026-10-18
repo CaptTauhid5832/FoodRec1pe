@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getRecipeKey } from "../redux/favoritesSlice";
+import { imageSource } from "../utils/imageSource";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -87,7 +88,7 @@ export default function FavoriteScreen() {
                   : navigation.navigate("CustomRecipesScreen", { recipe: item })
               }
             >
-              {image ? <Image source={{ uri: image }} style={styles.recipeImage} /> : null}
+              {image ? <Image source={imageSource(image)} style={styles.recipeImage} /> : null}
               <Text style={styles.recipeTitle}>
                 {name.length > 20 ? `${name.slice(0, 20)}...` : name}
               </Text>

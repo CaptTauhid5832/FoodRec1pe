@@ -76,3 +76,9 @@ test("Dessert shows dessert recipes", async () => {
   await fireEvent.press(screen.getByText("Dessert"));
   expect(screen.getByText("Chocolate Brownies")).toBeTruthy();
 });
+
+test("Chocolate Brownies uses the bundled photo", () => {
+  const recipes = require("../src/data/moreRecipes").default;
+  const brownies = recipes.find((r) => r.recipeName === "Chocolate Brownies");
+  expect(typeof brownies.recipeImage).not.toBe("string"); // bundled asset, not a web link
+});

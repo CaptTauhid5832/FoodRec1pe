@@ -5,6 +5,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
+import { imageSource } from "../utils/imageSource";
 import { useDispatch, useSelector } from "react-redux"; // Redux hooks
 import { toggleFavorite, selectIsFavorite } from "../redux/favoritesSlice"; // Redux action
 
@@ -39,7 +40,7 @@ export default function RecipeDetailScreen(props) {
     >
       {/* Recipe Image */}
       <View style={styles.imageContainer} testID="imageContainer">
-        <Image source={{ uri: recipe.recipeImage }} style={styles.recipeImage} />
+        <Image source={imageSource(recipe.recipeImage)} style={styles.recipeImage} />
       </View>
 
       {/* Back Button and Favorite Button */}

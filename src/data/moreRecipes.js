@@ -7,7 +7,7 @@ const moreRecipes = [
     "idCategory": "3",
     "recipeName": "Chocolate Brownies",
     "recipeInstructions": "Heat the oven to 180C/160C fan. Line a 20cm square tin with baking paper.\r\nMelt the chocolate and butter together over a low heat, then let it cool slightly.\r\nWhisk the eggs and sugar until pale and thick, then fold in the chocolate mixture.\r\nSift in the flour and cocoa and fold gently until just combined.\r\nPour into the tin and bake for 25 minutes until the top is set but the middle is still soft.\r\nCool completely in the tin before cutting into squares.",
-    "recipeImage": "https://www.themealdb.com/images/category/dessert.png",
+    "recipeImage": require("../../assets/recipes/brownies.jpg"),
     "recipeId": "dessert_15",
     "recipeCategory": "Dessert",
     "recipeOrigin": "American",
