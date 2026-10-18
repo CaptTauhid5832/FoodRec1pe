@@ -79,7 +79,7 @@ export default function MyRecipeScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleAddrecipe} style={styles.addButton} testID="addRecipeButton">
-          <Text style={styles.addButtonText}>Add New recipe</Text>
+          <Text style={styles.addButtonText}>Add New Recipe</Text>
         </TouchableOpacity>
       </View>
 

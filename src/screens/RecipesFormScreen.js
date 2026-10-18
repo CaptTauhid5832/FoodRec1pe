@@ -1,6 +1,7 @@
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from "react-native";
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 export const STORAGE_KEY = "customrecipes";
@@ -12,8 +13,38 @@ export default function RecipesFormScreen({ route, navigation }) {
   const { recipeToEdit, recipeIndex } = route.params || {};
   const [title, setTitle] = useState(recipeToEdit ? recipeToEdit.title : "");
   const [image, setImage] = useState(recipeToEdit ? recipeToEdit.image : "");
-  const [description, setDescription] = useState(recipeToEdit ? recipeToEdit.description : "");
+  const [ingredients, setIngredients] = useState(
+    recipeToEdit && recipeToEdit.ingredients ? recipeToEdit.ingredients.join("\n") : ""
+  );
+  const [instructions, setInstructions] = useState(
+    recipeToEdit
+      ? recipeToEdit.instructions
+        ? recipeToEdit.instructions.join("\n")
+        : recipeToEdit.description || ""
+      : ""
+  );
   const [error, setError] = useState("");
+
+  const toList = (text) =>
+    text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        quality: 0.5,
+      });
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        setImage(result.assets[0].uri);
+      }
+    } catch (e) {
+      console.error("Error picking image:", e);
+      setError("Could not open the photo library.");
+    }
+  };
 
   const saverecipe = async () => {
     if (!title.trim()) {
@@ -25,7 +56,9 @@ export default function RecipesFormScreen({ route, navigation }) {
       id: recipeToEdit?.id || makeRecipeId(),
       title: title.trim(),
       image: image.trim(),
-      description: description.trim(),
+      ingredients: toList(ingredients),
+      instructions: toList(instructions),
+      description: toList(instructions).join(" "),
     };
     try {
       const existingRecipes = await AsyncStorage.getItem(STORAGE_KEY);
@@ -46,9 +79,10 @@ export default function RecipesFormScreen({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <Text style={styles.label}>Recipe Name</Text>
       <TextInput
-        placeholder="Title"
+        placeholder="Recipe name"
         value={title}
         onChangeText={(t) => {
           setTitle(t);
@@ -57,8 +91,13 @@ export default function RecipesFormScreen({ route, navigation }) {
         style={styles.input}
         testID="titleInput"
       />
+
+      <Text style={styles.label}>Image</Text>
+      <TouchableOpacity onPress={pickImage} style={styles.uploadButton} testID="uploadImageButton">
+        <Text style={styles.uploadButtonText}>Upload Image</Text>
+      </TouchableOpacity>
       <TextInput
-        placeholder="Image URL"
+        placeholder="or paste an image URL"
         value={image}
         onChangeText={setImage}
         style={styles.input}
@@ -66,36 +105,73 @@ export default function RecipesFormScreen({ route, navigation }) {
         testID="imageInput"
       />
       {image ? (
-        <Image source={{ uri: image }} style={styles.image} />
+        <Image source={{ uri: image }} style={styles.image} testID="imagePreview" />
       ) : (
-        <Text style={styles.imagePlaceholder}>Upload Image URL</Text>
+        <Text style={styles.imagePlaceholder}>No image selected</Text>
       )}
+
+      <Text style={styles.label}>Ingredients (one per line)</Text>
       <TextInput
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
+        placeholder={"2 eggs\n1 cup flour"}
+        value={ingredients}
+        onChangeText={setIngredients}
         multiline={true}
-        numberOfLines={4}
-        style={[styles.input, { height: hp(20), textAlignVertical: "top" }]}
-        testID="descriptionInput"
+        numberOfLines={5}
+        style={[styles.input, styles.multiline]}
+        testID="ingredientsInput"
       />
+
+      <Text style={styles.label}>Instructions (one step per line)</Text>
+      <TextInput
+        placeholder={"Mix the eggs and flour\nBake for 20 minutes"}
+        value={instructions}
+        onChangeText={setInstructions}
+        multiline={true}
+        numberOfLines={6}
+        style={[styles.input, styles.multiline]}
+        testID="instructionsInput"
+      />
+
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <TouchableOpacity onPress={saverecipe} style={styles.saveButton} testID="saveButton">
-        <Text style={styles.saveButtonText}>Save recipe</Text>
+        <Text style={styles.saveButtonText}>Save Recipe</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cancelButton}>
         <Text style={styles.cancelButtonText}>Cancel</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
+  },
+  content: {
     padding: wp(4),
     paddingTop: hp(4),
-    backgroundColor: "white",
+    paddingBottom: hp(6),
+  },
+  label: {
+    fontWeight: "bold",
+    color: "#4B5563",
+    marginTop: hp(1),
+  },
+  multiline: {
+    height: hp(16),
+    textAlignVertical: "top",
+  },
+  uploadButton: {
+    backgroundColor: "#F59E0B",
+    paddingVertical: 10,
+    alignItems: "center",
+    borderRadius: 6,
+    marginTop: hp(1),
+  },
+  uploadButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,

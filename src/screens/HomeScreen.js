@@ -9,6 +9,7 @@ import {
 import Categories from "../components/categories";
 import FoodItems from "../components/recipes";
 import moreRecipes from "../data/moreRecipes";
+import extraCategoryRecipes from "../data/extraCategoryRecipes";
 
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState("Chicken");
@@ -47,6 +48,31 @@ export default function HomeScreen() {
       idCategory: "8",
       strCategory: "Seafood",
       strCategoryThumb: "https://www.themealdb.com/images/category/seafood.png",
+    },
+    {
+      idCategory: "9",
+      strCategory: "Breakfast",
+      strCategoryThumb: "https://www.themealdb.com/images/category/breakfast.png",
+    },
+    {
+      idCategory: "10",
+      strCategory: "Pork",
+      strCategoryThumb: "https://www.themealdb.com/images/category/pork.png",
+    },
+    {
+      idCategory: "11",
+      strCategory: "Starter",
+      strCategoryThumb: "https://www.themealdb.com/images/category/starter.png",
+    },
+    {
+      idCategory: "12",
+      strCategory: "Vegetarian",
+      strCategoryThumb: "https://www.themealdb.com/images/category/vegetarian.png",
+    },
+    {
+      idCategory: "13",
+      strCategory: "Side",
+      strCategoryThumb: "https://www.themealdb.com/images/category/side.png",
     },
       
   ]);
@@ -654,6 +680,7 @@ export default function HomeScreen() {
       ],
     },
     ...moreRecipes,
+    ...extraCategoryRecipes,
   ]);
 
   const handleChangeCategory = (category) => {

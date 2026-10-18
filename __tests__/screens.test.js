@@ -6,6 +6,7 @@ import favoritesReducer from "../src/redux/favoritesSlice";
 import HomeScreen from "../src/screens/HomeScreen";
 import RecipeDetailScreen from "../src/screens/RecipeDetailScreen";
 import CustomRecipesScreen from "../src/screens/CustomRecipesScreen";
+import RecipesFormScreen from "../src/screens/RecipesFormScreen";
 
 const mockNavigate = jest.fn();
 let mockParams;
@@ -65,7 +66,7 @@ test("custom recipe screen shows and favorites a user recipe", async () => {
 
 test("every category has at least one recipe", async () => {
   await renderWithStore(<HomeScreen />);
-  for (const cat of ["Beef","Chicken","Dessert","Lamb","Pasta","Seafood"]) {
+  for (const cat of ["Beef","Chicken","Dessert","Lamb","Pasta","Seafood","Breakfast","Pork","Starter","Vegetarian","Side"]) {
     await fireEvent.press(screen.getByText(cat));
     expect(screen.queryByText("No recipes in this category yet.")).toBeNull();
   }
@@ -85,7 +86,7 @@ test("Chocolate Brownies uses the bundled photo", () => {
 
 test("removed categories are gone", async () => {
   await renderWithStore(<HomeScreen />);
-  for (const cat of ["Miscellaneous","Pork","Side","Starter","Vegan","Vegetarian","Breakfast","Goat"]) {
+  for (const cat of ["Miscellaneous","Vegan","Goat"]) {
     expect(screen.queryByText(cat)).toBeNull();
   }
 });
@@ -134,4 +135,31 @@ test("every added recipe has its own bundled photo", () => {
   const recipes = require("../src/data/moreRecipes").default;
   expect(recipes.length).toBe(5);
   for (const r of recipes) expect(typeof r.recipeImage).not.toBe("string");
+});
+
+test("home shows at least 10 categories", async () => {
+  await renderWithStore(<HomeScreen />);
+  const cats = ["Beef","Chicken","Dessert","Lamb","Pasta","Seafood","Breakfast","Pork","Starter","Vegetarian","Side"];
+  for (const cat of cats) expect(screen.getByText(cat)).toBeTruthy();
+  expect(cats.length).toBeGreaterThanOrEqual(10);
+});
+
+test("add recipe form has name, image upload, ingredients, instructions and Save Recipe", async () => {
+  await render(<RecipesFormScreen route={{}} navigation={{ goBack: jest.fn() }} />);
+  expect(screen.getByTestId("titleInput")).toBeTruthy();
+  expect(screen.getByText("Upload Image")).toBeTruthy();
+  expect(screen.getByTestId("ingredientsInput")).toBeTruthy();
+  expect(screen.getByTestId("instructionsInput")).toBeTruthy();
+  expect(screen.getByText("Save Recipe")).toBeTruthy();
+});
+
+test("my recipe details show name, ingredients and instructions", async () => {
+  mockParams = { recipe: { id: "x1", title: "Pancakes", image: "https://example.com/p.png",
+    ingredients: ["2 eggs", "1 cup flour"], instructions: ["Mix", "Fry"] } };
+  await renderWithStore(<CustomRecipesScreen />);
+  expect(screen.getByText("Pancakes")).toBeTruthy();
+  expect(screen.getByText("Ingredients")).toBeTruthy();
+  expect(screen.getByText(/2 eggs/)).toBeTruthy();
+  expect(screen.getByText("Instructions")).toBeTruthy();
+  expect(screen.getByText("2. Fry")).toBeTruthy();
 });

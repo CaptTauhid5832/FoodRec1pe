@@ -35,6 +35,11 @@ export default function CustomRecipesScreen() {
     );
   }
 
+  const ingredients = recipe.ingredients || [];
+  // older saved recipes only have a description
+  const instructions =
+    recipe.instructions || (recipe.description ? [recipe.description] : []);
+
   const handleToggleFavorite = () => {
     dispatch(toggleFavorite(recipe));
   };
@@ -72,9 +77,30 @@ export default function CustomRecipesScreen() {
       {/* Recipe Details */}
       <View style={styles.contentContainer} testID="contentContainer">
         <Text style={styles.recipeTitle}>{recipe.title}</Text>
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Content</Text>
-          <Text style={styles.contentText}>{recipe.description}</Text>
+        <View style={styles.sectionContainer} testID="customIngredients">
+          <Text style={styles.sectionTitle}>Ingredients</Text>
+          {ingredients.length > 0 ? (
+            ingredients.map((item, i) => (
+              <Text key={i} style={styles.contentText}>
+                {"\u2022 "}
+                {item}
+              </Text>
+            ))
+          ) : (
+            <Text style={styles.contentText}>No ingredients added.</Text>
+          )}
+        </View>
+        <View style={styles.sectionContainer} testID="customInstructions">
+          <Text style={styles.sectionTitle}>Instructions</Text>
+          {instructions.length > 0 ? (
+            instructions.map((step, i) => (
+              <Text key={i} style={styles.contentText}>
+                {`${i + 1}. ${step}`}
+              </Text>
+            ))
+          ) : (
+            <Text style={styles.contentText}>No instructions added.</Text>
+          )}
         </View>
       </View>
     </ScrollView>
@@ -155,7 +181,8 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
   },
   contentText: {
-    fontSize: hp(1.6),
+    fontSize: hp(1.8),
     color: "#4B5563",
+    marginBottom: 4,
   },
 });

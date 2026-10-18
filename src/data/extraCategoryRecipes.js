@@ -1,0 +1,57 @@
+// One recipe for each extra category. The photo is that category's image.
+const img = (name) => `https://www.themealdb.com/images/category/${name}.png`;
+
+const make = (idFood, idCategory, category, recipeName, origin, ingredients, steps) => ({
+  category,
+  idFood,
+  idCategory,
+  recipeName,
+  recipeInstructions: steps.join("\r\n"),
+  recipeImage: img(category.toLowerCase()),
+  recipeId: `${category.toLowerCase()}_${idFood}`,
+  recipeCategory: category,
+  recipeOrigin: origin,
+  cookingDescription: steps[0],
+  recipeTags: category,
+  ingredients: ingredients.map(([ingredientName, measure]) => ({ ingredientName, measure })),
+});
+
+const extraCategoryRecipes = [
+  make("50", "9", "Breakfast", "Full English Breakfast", "British",
+    [["Eggs", "2"], ["Sausages", "2"], ["Bacon", "2 rashers"], ["Baked Beans", "200g"], ["Tomato", "1 halved"], ["Mushrooms", "100g"], ["Bread", "2 slices"]],
+    ["Grill the sausages and bacon until golden.",
+     "Fry the mushrooms and tomato halves in a little oil.",
+     "Warm the baked beans in a small pan.",
+     "Fry the eggs to your liking and toast the bread.",
+     "Serve everything together on a warm plate."]),
+  make("51", "10", "Pork", "Honey Garlic Pork Chops", "American",
+    [["Pork Chops", "4"], ["Honey", "3 tbs"], ["Garlic", "4 cloves minced"], ["Soy Sauce", "2 tbs"], ["Olive Oil", "1 tbs"], ["Salt", "pinch"], ["Pepper", "pinch"]],
+    ["Season the pork chops with salt and pepper.",
+     "Heat the oil in a pan and cook the chops 4-5 minutes per side.",
+     "Mix the honey, garlic and soy sauce in a bowl.",
+     "Pour the sauce over the chops and simmer for 2 minutes until sticky.",
+     "Rest for 5 minutes, then serve."]),
+  make("52", "11", "Starter", "Garlic Bread", "Italian",
+    [["Baguette", "1"], ["Butter", "100g softened"], ["Garlic", "3 cloves crushed"], ["Parsley", "2 tbs chopped"], ["Salt", "pinch"]],
+    ["Heat the oven to 200C/180C fan.",
+     "Mix the butter, garlic, parsley and salt.",
+     "Cut the baguette into slices without cutting all the way through.",
+     "Spread the garlic butter between the slices and wrap in foil.",
+     "Bake for 15 minutes, open the foil and bake 5 more minutes until crisp."]),
+  make("53", "12", "Vegetarian", "Vegetable Stir Fry", "Chinese",
+    [["Broccoli", "1 head"], ["Carrot", "2 sliced"], ["Bell Pepper", "1 sliced"], ["Soy Sauce", "3 tbs"], ["Ginger", "1 tbs grated"], ["Garlic", "2 cloves"], ["Vegetable Oil", "2 tbs"]],
+    ["Heat the oil in a wok over high heat.",
+     "Add the garlic and ginger and fry for 30 seconds.",
+     "Add the carrot and broccoli and stir fry for 3 minutes.",
+     "Add the bell pepper and cook for 2 more minutes.",
+     "Stir in the soy sauce and serve with rice."]),
+  make("54", "13", "Side", "Roast Potatoes", "British",
+    [["Potatoes", "1kg"], ["Vegetable Oil", "4 tbs"], ["Rosemary", "2 sprigs"], ["Salt", "1 tsp"]],
+    ["Heat the oven to 220C/200C fan with the oil in a roasting tin.",
+     "Peel and cut the potatoes into large chunks.",
+     "Boil for 8 minutes, drain and shake to rough up the edges.",
+     "Tip into the hot oil, add rosemary and salt, and turn to coat.",
+     "Roast for 45 minutes, turning once, until golden and crisp."]),
+];
+
+export default extraCategoryRecipes;
